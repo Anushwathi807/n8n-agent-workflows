@@ -1,0 +1,115 @@
+{
+  "name": "RSS FEED",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a4f14233-a425-4340-9f67-542aeb171f06",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      url: 'https://medium.com/feed/n8n-io'\n    }\n  },\n  {\n    json: {\n      url: 'https://dev.to/feed/n8n'\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "fbd6ed33-8aea-485a-aa7d-22bd0dc5c190",
+      "name": "FeedURLs"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        0
+      ],
+      "id": "6dff6754-231b-463a-b042-0bf41c992967",
+      "name": "BatchFeeds"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        208
+      ],
+      "id": "14a77b69-a572-48fd-92bc-7f18d9be4c13",
+      "name": "ReadFeed"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "FeedURLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FeedURLs": {
+      "main": [
+        [
+          {
+            "node": "BatchFeeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BatchFeeds": {
+      "main": [
+        [],
+        [
+          {
+            "node": "ReadFeed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ReadFeed": {
+      "main": [
+        [
+          {
+            "node": "BatchFeeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": null
+}

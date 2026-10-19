@@ -1,0 +1,187 @@
+{
+  "name": "DATETIME",
+  "nodes": [
+    {
+      "id": "24732e65-bd24-43c6-8101-befca1a1fe0a",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -16
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "3e08dbad-6cf2-4697-a39e-dcf03b15d09a",
+      "name": "GetCustomerData",
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -32
+      ],
+      "parameters": {
+        "operation": "getAllPeople",
+        "returnAll": true
+      }
+    },
+    {
+      "id": "79024c8f-30c2-46f4-878e-0763adb49fa2",
+      "name": "RoundDate",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        112,
+        -32
+      ],
+      "parameters": {
+        "operation": "roundDate",
+        "date": "={{ $json.created }}",
+        "mode": "roundUp",
+        "outputFieldName": "newDate",
+        "options": {
+          "includeInputFields": true
+        }
+      }
+    },
+    {
+      "id": "133ec2e3-33a1-4e8c-a79f-ce8eb055038a",
+      "name": "CheckAfter1960",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        336,
+        -32
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9353420a-83ed-4565-b4b8-fbda7269a388",
+              "leftValue": "={{ $json.newDate }}",
+              "rightValue": "1960-01-01T00:00:00",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "0fe9ca39-9937-43ec-aa8f-55666b3d0359",
+      "name": "Add5days",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        592,
+        -256
+      ],
+      "parameters": {
+        "operation": "addToDate",
+        "magnitude": "={{ $json.newDate }}",
+        "duration": 5,
+        "outputFieldName": "plus5days",
+        "options": {
+          "includeInputFields": true
+        }
+      }
+    },
+    {
+      "id": "228de34d-01dd-487d-a60d-e07f969a6887",
+      "name": "Add20Years",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        704,
+        64
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d8fe5ef2-acc5-46e4-8c48-bfd015a0037b",
+              "name": "=newYear",
+              "value": "={{ $json.newDate.toDateTime().plus(20, 'years') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "GetCustomerData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCustomerData": {
+      "main": [
+        [
+          {
+            "node": "RoundDate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RoundDate": {
+      "main": [
+        [
+          {
+            "node": "CheckAfter1960",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckAfter1960": {
+      "main": [
+        [
+          {
+            "node": "Add5days",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add20Years",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {}
+}

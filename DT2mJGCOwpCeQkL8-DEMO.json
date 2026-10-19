@@ -1,0 +1,167 @@
+{
+  "name": "DEMO",
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3-flash-preview",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.chatInput }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        -48
+      ],
+      "id": "250b98c0-4cf1-4eee-911f-d9abb52c3323",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "ziCHwOnluvM0syKp",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2476d60f-4c6c-4552-a80e-5c5c8c306e2c",
+              "name": "GEmini's REsponse",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "cf45e221-3560-481f-997c-fc5b21a16d0d",
+              "name": "content.parts[0].text",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        512,
+        -48
+      ],
+      "id": "8877c3ce-a727-416e-8dcf-f75feff0cf48",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -48,
+        -48
+      ],
+      "id": "6252ac0e-adff-4355-b945-e666781731aa",
+      "name": "When chat message received",
+      "webhookId": "33328578-2fa2-42d3-b642-98363e7e0344"
+    },
+    {
+      "parameters": {
+        "formTitle": "Demo",
+        "formDescription": "Binary Data",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name"
+            },
+            {
+              "fieldLabel": "File",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        48,
+        112
+      ],
+      "id": "5f41b0b8-3a90-4e95-be48-50149bc1b937",
+      "name": "On form submission",
+      "webhookId": "9dc8495f-2450-41ec-b5ee-074fe751c041"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        288,
+        176
+      ],
+      "id": "1ea82421-c718-4a89-bdb5-6b97314844f1",
+      "name": "Edit Fields1"
+    }
+  ],
+  "connections": {
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

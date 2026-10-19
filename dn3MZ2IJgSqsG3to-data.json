@@ -1,0 +1,108 @@
+{
+  "name": "data",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9bb7103f-8335-426a-9a79-986dc60e646f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "getAllPeople"
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "0eaccf9d-bac0-4fb1-8b99-23cb92246d34",
+      "name": "GetCustomers"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { totalCustomers: $input.all().length } }]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "183ae440-33df-4ec8-a394-7ad521a5d8f4",
+      "name": "CountCustomers"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f740d09f-4922-48b3-8b0f-a923294063b4",
+              "name": "summary",
+              "value": "={{ $('GetCustomers').first().json.name }} is one of {{ $('CountCustomers').first().json.totalCustomers }} customers",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        672,
+        0
+      ],
+      "id": "6af90f97-2b23-472a-9136-7d6cd3433453",
+      "name": "SetSummary"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "GetCustomers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCustomers": {
+      "main": [
+        [
+          {
+            "node": "CountCustomers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CountCustomers": {
+      "main": [
+        [
+          {
+            "node": "SetSummary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": null
+}

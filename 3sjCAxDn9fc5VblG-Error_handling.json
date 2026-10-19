@@ -1,0 +1,149 @@
+{
+  "name": "Error handling",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -144
+      ],
+      "id": "4f33e8d2-d61c-4d04-91d8-d998c28ea880",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "sendTo": "anushwathiranganathan@gmail.com",
+        "subject": "Error",
+        "emailType": "text",
+        "message": "error detected",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -144
+      ],
+      "id": "5515d9d8-78e9-42f5-b83c-8d6e447f21b0",
+      "name": "Send a message",
+      "webhookId": "8971279d-7d28-4192-928c-46a51ff443d5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Hfh5BxAPJQ1QkuXd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        80
+      ],
+      "id": "88067224-e6a3-446f-8b1e-22793c7544ad",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": " https://httpstat.us/500",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        64,
+        80
+      ],
+      "id": "f0b3cb69-08f3-41b0-afb8-cac27074217f",
+      "name": "BAD request",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        336,
+        16
+      ],
+      "id": "7d3054cd-6d48-418e-95ec-53a473c043db",
+      "name": "Succes"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        336,
+        304
+      ],
+      "id": "6b8850c7-9932-418a-9387-d7eb478652be",
+      "name": "Handler"
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "BAD request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BAD request": {
+      "main": [
+        [
+          {
+            "node": "Handler",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Succes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handler": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

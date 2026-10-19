@@ -1,0 +1,102 @@
+{
+  "name": "Binary data Image edit",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "14b6f1ae-6f96-475f-8953-16acc70684b7",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://learn.app.n8n.cloud/webhook/apis/dog-images",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b5075c75-f3b7-4852-8e42-217ddd4c1af1",
+      "name": "GetDogURL"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "e83b49cf-a51e-48e0-a3c9-4fffa690d7b7",
+      "name": "GetDogImage"
+    },
+    {
+      "parameters": {
+        "operation": "rotate",
+        "rotate": 180,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "84598679-09c2-47b7-b286-49cd2bd4723c",
+      "name": "Edit Image"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "GetDogURL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetDogURL": {
+      "main": [
+        [
+          {
+            "node": "GetDogImage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetDogImage": {
+      "main": [
+        [
+          {
+            "node": "Edit Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": null
+}

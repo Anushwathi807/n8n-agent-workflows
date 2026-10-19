@@ -1,0 +1,56 @@
+{
+  "name": "cert1",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "dd07968c-77b4-4d87-a9cf-52b95bb8ab92",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "all",
+        "limit": 10,
+        "additionalFields": {
+          "keyword": "automation."
+        }
+      },
+      "type": "n8n-nodes-base.hackerNews",
+      "typeVersion": 1,
+      "position": [
+        240,
+        0
+      ],
+      "id": "fc1fb398-d2e3-4775-a607-d43429fdc1fc",
+      "name": "Hacker NEWs",
+      "notesInFlow": true,
+      "notes": "Get atleast 10 articles"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Hacker NEWs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": null
+}
