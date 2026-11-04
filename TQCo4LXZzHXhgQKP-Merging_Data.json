@@ -1,0 +1,127 @@
+{
+  "name": "Merging Data",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1f5369bf-32ae-4eb4-a2a9-69668df7deca",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "vEsAaSiY1FJ97N3K",
+          "mode": "list",
+          "cachedResultName": "asset v1 n8n QS101 2026H2 type asset block customers",
+          "cachedResultUrl": "/projects/4XaarACPFhyUyPFc/datatables/vEsAaSiY1FJ97N3K"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        -80
+      ],
+      "id": "9b56cf29-ddab-41bc-9464-f887e3c9a717",
+      "name": "GetCustomers"
+    },
+    {
+      "parameters": {
+        "url": "https://learn.app.n8n.cloud/webhook/countries",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        288,
+        96
+      ],
+      "id": "3954aee6-e935-402c-8145-0b69ea8739b2",
+      "name": "GetCountries"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "customerCountry",
+              "field2": "name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        544,
+        -32
+      ],
+      "id": "06ced51b-7195-4365-8875-98c297dad25b",
+      "name": "Merge"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "GetCustomers",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetCountries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCountries": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "GetCustomers": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": null
+}
